@@ -11,13 +11,38 @@ the function below should be the only one in this file.
 */
 
 #include "split.h"
+#include <cstddef>
 
-/* Add a prototype for a helper function here if you need */
+void insert(Node*& first_node, Node* insertion_node); // helper function
 
 void split(Node*& in, Node*& odds, Node*& evens)
 {
-  /* Add code here */
-// WRITE YOUR CODE HERE
+  // when the linked list is empty.
+  if (in == NULL)
+  {
+    return;
+  }
+
+  if (in->value % 2 == 0) { // is even
+    insert(evens, in);
+  }
+  else {
+    insert(odds, in);
+  }
+
+  split(in->next, odds, evens);
+
+  return;
 }
 
-/* If you needed a helper function, write it here */
+/* this helper function assumes that you have already checked
+   that the list is not empty */
+void insert(Node*& first_node, Node* insertion_node)
+{
+  if (first_node->next == NULL)
+  {
+    first_node->next = insertion_node;
+  }
+  insert(first_node->next, insertion_node);
+  return;
+}
