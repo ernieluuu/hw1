@@ -27,6 +27,14 @@ class ULListStr {
       first = last = 0;
       prev = next = NULL;
     }
+
+    // added member functions:
+    bool isEmpty() { 
+      return (first==0 && last==0); 
+    }
+    bool isFull() { 
+      return (first==0 && last==ARRSIZE);
+    }
   };
 
   /**
