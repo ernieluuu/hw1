@@ -83,6 +83,7 @@ void ULListStr::pop_back()
   { // when pop_back results in an empty struct
     Item* temp = tail_;
     tail_ = tail_->prev;
+    tail_->next = NULL;
     tail_->last = ARRSIZE;
     delete temp;
     --(this->size_);
@@ -149,6 +150,26 @@ void ULListStr::pop_front()
   // if empty, ___
   // go to head, cast head as temp, move head one up, delete temp
   // size--;
+  if (this->empty()){
+    return;
+  }
+
+  if(head_->first == ARRSIZE-1)
+  { // when you remove the last element in an Item struct
+    Item* temp = head_;
+    head_ = head_->next;
+    head_->prev = NULL;
+    head_->first = 0;
+    delete temp;
+    --(this->size_);
+    return;
+  }
+  else
+  {
+    ++(head_->first);
+    --(this->size_);
+    return;
+  }
 }
 
 /**
@@ -159,6 +180,7 @@ std::string ULListStr::const & back() const
 {
   // if empty, return _
   // go to tail, go to last
+  return tail_->val[tail_->(last-1)];
 }
 
 /**
@@ -168,6 +190,7 @@ std::string ULListStr::const & back() const
 std::string ULListStr::const & front() const
 {
   // go to head, go to first
+  return head_->val[head_->first];
 }
 
 /** 
@@ -177,7 +200,28 @@ std::string ULListStr::const & front() const
  */
 std::string* ULListStr::getValAtLoc(size_t loc) const
 {
-
+  // if loc is bigger than elements in list, throw error
+  // else walk the list
+  if (loc > size_)
+  {
+    return "ERROR: This loc doesn't exist!";
+  }
+  else 
+  { // check validity of this call
+    Item* temp = head_;
+    size_t count = head_->first;
+    for(int i=0; i < loc; i++)
+    {
+      if(count == ARRSIZE-1)
+      {
+        temp = temp->next;
+        count = 1;
+        continue;
+      }
+      count++;
+    }
+    return temp->val[count];
+  }
 }
 
 // MY CODE--END
