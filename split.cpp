@@ -2,9 +2,9 @@
 CSCI 104: Homework 1 Problem 1
 
 Write a recursive function to split a sorted singly-linked
-list into two sorted linked lists, where one has the even 
-numbers and the other contains the odd numbers. Students 
-will receive no credit for non-recursive solutions. 
+list into two sorted linked lists, where one has the even
+numbers and the other contains the odd numbers. Students
+will receive no credit for non-recursive solutions.
 To test your program write a separate .cpp file and #include
 split.h.  **Do NOT add main() to this file**.  When you submit
 the function below should be the only one in this file.
@@ -17,32 +17,55 @@ void insert(Node*& first_node, Node* insertion_node); // helper function
 
 void split(Node*& in, Node*& odds, Node*& evens)
 {
-  // when the linked list is empty.
-  if (in == NULL)
-  {
+    // when the linked list is empty.
+    if (in == NULL)
+    {
+        return;
+    }
+
+    /*because we will be changing first_node->next to NULL in insert()
+    we cannot simply do recursion on in->next*/
+    Node* temp = in->next;
+
+    if (in->value % 2 == 0) { // is even
+        insert(evens, in);
+    }
+    else { // is odd
+        insert(odds, in);
+    }
+
+    split(temp, odds, evens);
+
     return;
-  }
-
-  if (in->value % 2 == 0) { // is even
-    insert(evens, in);
-  }
-  else {
-    insert(odds, in);
-  }
-
-  split(in->next, odds, evens);
-
-  return;
 }
 
-/* this helper function assumes that you have already checked
-   that the list is not empty */
-void insert(Node*& first_node, Node* insertion_node)
+void insert(Node*& first_node, Node* insertion_node) 
 {
-  if (first_node->next == NULL)
-  {
-    first_node->next = insertion_node;
-  }
-  insert(first_node->next, insertion_node);
-  return;
+    if (first_node == NULL)
+    {
+        first_node = insertion_node;
+        first_node->next = NULL;
+        return;
+    }
+    else if (first_node->next == NULL)
+    {
+        first_node->next = insertion_node;
+        first_node->next->next = NULL;
+        return;
+    }
+    else
+    {
+        /*iterates through evens or odds to reach last element*/
+        insert(first_node->next, insertion_node);
+    }
+    //if (first_node->next == NULL) /* error on this line, evens & odds are empty to start */
+    //{
+    //    first_node->next = insertion_node;
+    //}
+    //insert(first_node->next, insertion_node);
+    //return;
 }
+// I think it is because I didn't change the next pointer of these inserted nodes
+// they point where they pointed before!
+// also, how to make sure you insert @ end of the list?
+// no way for this function to differentiate evens and odds!
