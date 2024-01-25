@@ -36,6 +36,8 @@ void split(Node*& in, Node*& odds, Node*& evens)
 
     split(temp, odds, evens);
 
+    in = NULL; // after 'in' is distributed to other lists
+
     return;
 }
 
