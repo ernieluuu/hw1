@@ -11,6 +11,9 @@ g++ split.cpp test_split.cpp -o test_split
 
 #include "split.h"
 #include <cstddef>
+#include <iostream>
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
@@ -51,4 +54,49 @@ int main(int argc, char* argv[])
     split(head, odds, evens);
 
     /*print out the original linked list; prints out the evens; prints out the odds: */
+
+    cout << "The linked list: " << endl;
+    
+    Node* curr = evens;
+
+    cout << "Evens: " << endl;
+
+    while (curr != NULL)
+    {
+        cout << "value: " << curr->value << endl;
+        curr = curr->next;
+    }
+
+    cout << "end of evens." << endl;
+
+    curr = odds;
+
+    cout << "Odds: " << endl;
+
+    while (curr != NULL)
+    {
+        cout << "value: " << curr->value << endl;
+        curr = curr->next;
+    }
+
+    cout << "end of odds." << endl;
+
+    Node* temp;
+    /*clean up memory*/
+    while(curr != NULL) // odds
+    {
+        temp = curr;
+        curr = curr->next;
+        delete temp;
+    }
+
+    curr = evens;
+    while(curr != NULL) // evens
+    {
+        temp = curr;
+        curr = curr->next;
+        delete temp;
+    }
+
+    return 0;
 }
