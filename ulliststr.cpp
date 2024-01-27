@@ -41,12 +41,12 @@ void ULListStr::push_back(const std::string& val)
     // update size_
     if (this->empty())
     {
-        head_, tail_ = new Item();
+        head_ = new Item();
+        tail_ = head_;
         tail_->first = 0;
         tail_->last = 1;
         tail_->val[(tail_->last) - 1] = val;
         ++(this->size_);
-        head_ = tail_;
         return;
     }
     else if (tail_->last == ARRSIZE)
@@ -80,12 +80,15 @@ void ULListStr::pop_back()
         return;
     }
 
-    if (tail_->last == 1)
-    { // when pop_back results in an empty struct
+    if (tail_->first - tail_->last == 1)
+    {
         Item* temp = tail_;
-        tail_ = tail_->prev;
+        tail_ = tail_->prev; /*will be set to NULL if there is no prev*/
         tail_->next = NULL;
-        tail_->last = ARRSIZE;
+        if (size_ == 1)
+        {
+            head_ = tail_;
+        }
         delete temp;
         --(this->size_);
         return;
@@ -110,7 +113,8 @@ void ULListStr::push_front(const std::string& val)
 {
     if (this->empty())
     {
-        head_, tail_ = new Item();
+        head_ = new Item();
+        tail_ = head_;
         head_->first = ARRSIZE - 1;
         head_->last = ARRSIZE;
         head_->val[head_->first] = val;
@@ -148,23 +152,29 @@ void ULListStr::push_front(const std::string& val)
  */
 void ULListStr::pop_front()
 {
-    // if empty, ___
-    // go to head, cast head as temp, move head one up, delete temp
-    // size--;
     if (this->empty()) {
         return;
     }
 
-    if (head_->first == ARRSIZE - 1)
-    { // when you remove the last element in an Item struct
+    /*the if statement handles the case where
+    pop_front() pops a sole string at index ARRSIZE-1
+    and also the case where there is only one string in the entire
+    list, and pop_front() makes the list empty.*/
+    if (head_->last - head_->first == 1)
+    {
         Item* temp = head_;
         head_ = head_->next;
         head_->prev = NULL;
-        head_->first = 0;
+        if (size_ == 1) /*special case where head + tail are alr pointing at the same place*/
+        {
+            tail_ = head_;
+        }
+        //head_->first = 0; /*unneeded*/
         delete temp;
         --(this->size_);
         return;
     }
+    /*general case*/
     else
     {
         ++(head_->first);
@@ -201,18 +211,12 @@ std::string const& ULListStr::front() const
  */
 std::string* ULListStr::getValAtLoc(size_t loc) const
 {
-    // if loc is bigger than elements in list, throw error
-    // else walk the list
-    //if (loc > size_)
-    //{
-    //    return "ERROR: This loc doesn't exist!"; // error: Data Type not std::string* -- needs to be a ptr.
-    //}
-
-    if (loc > size_) {
-        throw std::invalid_argument("Bad location");
+    /*it is '>=' because size_t loc is an idx*/
+    if (loc >= size_) {
+        return NULL; /*invalid position*/
     }
 
-    // check validity of this call
+    /*walks through the list*/
     Item* temp = head_;
     size_t count = head_->first;
     for (int i = 0; i < loc; i++)
@@ -220,7 +224,7 @@ std::string* ULListStr::getValAtLoc(size_t loc) const
         if (count == ARRSIZE - 1)
         {
             temp = temp->next;
-            count = 1;
+            count = 0; /*sets it to first idx*/
             continue;
         }
         count++;
