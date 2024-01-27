@@ -46,6 +46,7 @@ void ULListStr::push_back(const std::string& val)
         tail_->last = 1;
         tail_->val[(tail_->last) - 1] = val;
         ++(this->size_);
+        head_ = tail_;
         return;
     }
     else if (tail_->last == ARRSIZE)
