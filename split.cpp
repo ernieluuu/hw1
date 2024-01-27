@@ -60,14 +60,4 @@ void insert(Node*& first_node, Node* insertion_node)
         /*iterates through evens or odds to reach last element*/
         insert(first_node->next, insertion_node);
     }
-    //if (first_node->next == NULL) /* error on this line, evens & odds are empty to start */
-    //{
-    //    first_node->next = insertion_node;
-    //}
-    //insert(first_node->next, insertion_node);
-    //return;
 }
-// I think it is because I didn't change the next pointer of these inserted nodes
-// they point where they pointed before!
-// also, how to make sure you insert @ end of the list?
-// no way for this function to differentiate evens and odds!
