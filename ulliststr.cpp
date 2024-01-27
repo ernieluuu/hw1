@@ -219,7 +219,7 @@ std::string* ULListStr::getValAtLoc(size_t loc) const
     /*walks through the list*/
     Item* temp = head_;
     size_t count = head_->first;
-    for (int i = 0; i < loc; i++)
+    for (size_t i = 0; i < loc; i++)
     {
         if (count == ARRSIZE - 1)
         {
